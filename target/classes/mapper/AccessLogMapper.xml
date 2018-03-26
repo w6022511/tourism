@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.eking.tourism.repository.mapper.AccessLogMapper">
+  <resultMap id="BaseResultMap" type="org.eking.tourism.repository.entity.AccessLog">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="TICKET_ORDER_ID" jdbcType="INTEGER" property="ticketOrderId" />
+    <result column="REAL_USER_ID" jdbcType="INTEGER" property="realUserId" />
+    <result column="RECOGNITION_TYPE" jdbcType="INTEGER" property="recognitionType" />
+    <result column="STATUS" jdbcType="INTEGER" property="status" />
+    <result column="ACCESS_DATE" jdbcType="TIMESTAMP" property="accessDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, TICKET_ORDER_ID, REAL_USER_ID, RECOGNITION_TYPE, STATUS, ACCESS_DATE
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_tourism_access_log
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_tourism_access_log
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="org.eking.tourism.repository.entity.AccessLog">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_tourism_access_log (TICKET_ORDER_ID, REAL_USER_ID,
+      RECOGNITION_TYPE, STATUS, ACCESS_DATE
+      )
+    values (#{ticketOrderId,jdbcType=INTEGER}, #{realUserId,jdbcType=INTEGER},
+      #{recognitionType,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{accessDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.eking.tourism.repository.entity.AccessLog">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_tourism_access_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      ID,
+      <if test="ticketOrderId != null">
+        TICKET_ORDER_ID,
+      </if>
+      <if test="realUserId != null">
+        REAL_USER_ID,
+      </if>
+      <if test="recognitionType != null">
+        RECOGNITION_TYPE,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="accessDate != null">
+        ACCESS_DATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=BIGINT},
+      <if test="ticketOrderId != null">
+        #{ticketOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="realUserId != null">
+        #{realUserId,jdbcType=INTEGER},
+      </if>
+      <if test="recognitionType != null">
+        #{recognitionType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="accessDate != null">
+        #{accessDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.eking.tourism.repository.entity.AccessLog">
+    update t_tourism_access_log
+    <set>
+      <if test="ticketOrderId != null">
+        TICKET_ORDER_ID = #{ticketOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="realUserId != null">
+        REAL_USER_ID = #{realUserId,jdbcType=INTEGER},
+      </if>
+      <if test="recognitionType != null">
+        RECOGNITION_TYPE = #{recognitionType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="accessDate != null">
+        ACCESS_DATE = #{accessDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByOrderId" parameterType="org.eking.tourism.repository.entity.AccessLog">
+    update t_tourism_access_log
+    set
+      RECOGNITION_TYPE = #{recognitionType,jdbcType=INTEGER},
+      ACCESS_DATE = #{accessDate,jdbcType=TIMESTAMP}
+    where TICKET_ORDER_ID = #{ticketOrderId,jdbcType=BIGINT}
+  </update>
+</mapper>

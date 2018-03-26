@@ -1,0 +1,86 @@
+package org.eking.tourism.module.wechat.controller;
+
+import org.eking.tourism.common.constant.MessageConstant;
+import org.eking.tourism.common.utils.CheckUtil;
+import org.eking.tourism.common.utils.MessageUtil;
+import org.eking.tourism.module.wechat.entity.MessageText;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
+
+@RestController
+public class WeChatController {
+
+    @Autowired
+    private CheckUtil checkUtil;
+
+    /**
+    * 校验signature，必须使用Getq请求
+    * @Author wangyu
+    * @Date 2018/3/18
+    */
+    @GetMapping("")
+    public String checkSignature(HttpServletRequest request, HttpServletResponse response){
+        System.out.println("success");
+        String signature = request.getParameter("signature");
+        String timestamp = request.getParameter("timestamp");
+        String nonce = request.getParameter("nonce");
+        String echostr = request.getParameter("echostr");
+
+        //校验成功，原样返回echostr参数内容，接入生效
+        if(checkUtil.checkSignature(signature,timestamp,nonce)){
+            return echostr;
+        }
+
+        return null;
+
+    }
+
+    /**
+    * Post请求，用来处理消息的接收与回复
+    * @Author wangyu
+    * @Date 2018/3/18
+    */
+    @PostMapping("")
+    public String doPost(HttpServletResponse response,HttpServletRequest request){
+        response.setCharacterEncoding("UTF-8");
+        try {
+            request.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        Map<String,String> map = MessageUtil.xmlToMap(request);
+        String toUserName = map.get("ToUserName");
+        String fromUserName = map.get("FromUserName");
+        String msgType = map.get("MsgType");
+        String content = map.get("Content");
+
+        String message = null;
+        if(MessageConstant.MESSAGE_TEXT.equals(msgType)){
+            //message = MessageUtil.initMessage(fromUserName,toUserName,"你发送的消息是："+content);
+            message = MessageUtil.initMessageNews(fromUserName,toUserName);
+            System.err.println(message);
+
+        }else if(MessageConstant.MESSAGE_EVENT.equals(msgType)){
+            String eventType = map.get("Event");
+
+            if (MessageConstant.MESSAGE_SUBSCRIBE.equals(eventType)){//关注事件
+                message = MessageUtil.initMessageNews(fromUserName,toUserName);
+                System.err.println(message);
+            }else if(MessageConstant.MESSAGE_CLICK.equals(eventType)){
+
+            }
+        }
+
+        return message;
+    }
+}

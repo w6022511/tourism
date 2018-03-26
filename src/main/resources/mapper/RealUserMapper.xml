@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.eking.tourism.repository.mapper.RealUserMapper">
+  <resultMap id="BaseResultMap" type="org.eking.tourism.repository.entity.RealUser">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="PAPERS_NUMBER" jdbcType="VARCHAR" property="papersNumber" />
+    <result column="FACE_PHOTO_PATH" jdbcType="VARCHAR" property="facePhotoPath" />
+    <result column="MOBILE_PHONE_NUMBER" jdbcType="VARCHAR" property="mobilePhoneNumber" />
+    <result column="CREATE_BY_OPEN_ID" jdbcType="VARCHAR" property="createByOpenId" />
+    <result column="CREATE_DATE" jdbcType="DATE" property="createDate" />
+    <result column="TICKET_ORDER_ID" jdbcType="VARCHAR" property="ticketOrderId" />
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, NAME, PAPERS_NUMBER, FACE_PHOTO_PATH, MOBILE_PHONE_NUMBER, CREATE_BY_OPEN_ID, 
+    CREATE_DATE, TICKET_ORDER_ID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_tourism_real_user
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_tourism_real_user
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.eking.tourism.repository.entity.RealUser">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_tourism_real_user (NAME, PAPERS_NUMBER,
+      FACE_PHOTO_PATH, MOBILE_PHONE_NUMBER, CREATE_BY_OPEN_ID, 
+      CREATE_DATE, TICKET_ORDER_ID)
+    values ( #{name,jdbcType=VARCHAR}, #{papersNumber,jdbcType=VARCHAR},
+      #{facePhotoPath,jdbcType=VARCHAR}, #{mobilePhoneNumber,jdbcType=VARCHAR}, #{createByOpenId,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=DATE}, #{ticketOrderId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="org.eking.tourism.repository.entity.RealUser">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_tourism_real_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      ID,
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="papersNumber != null">
+        PAPERS_NUMBER,
+      </if>
+      <if test="facePhotoPath != null">
+        FACE_PHOTO_PATH,
+      </if>
+      <if test="mobilePhoneNumber != null">
+        MOBILE_PHONE_NUMBER,
+      </if>
+      <if test="createByOpenId != null">
+        CREATE_BY_OPEN_ID,
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE,
+      </if>
+      <if test="ticketOrderId != null">
+        TICKET_ORDER_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=INTEGER},
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="papersNumber != null">
+        #{papersNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="facePhotoPath != null">
+        #{facePhotoPath,jdbcType=VARCHAR},
+      </if>
+      <if test="mobilePhoneNumber != null">
+        #{mobilePhoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="createByOpenId != null">
+        #{createByOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=DATE},
+      </if>
+      <if test="ticketOrderId != null">
+        #{ticketOrderId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.eking.tourism.repository.entity.RealUser">
+    update t_tourism_real_user
+    <set>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="papersNumber != null">
+        PAPERS_NUMBER = #{papersNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="facePhotoPath != null">
+        FACE_PHOTO_PATH = #{facePhotoPath,jdbcType=VARCHAR},
+      </if>
+      <if test="mobilePhoneNumber != null">
+        MOBILE_PHONE_NUMBER = #{mobilePhoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="createByOpenId != null">
+        CREATE_BY_OPEN_ID = #{createByOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE = #{createDate,jdbcType=DATE},
+      </if>
+      <if test="ticketOrderId != null">
+        TICKET_ORDER_ID = #{ticketOrderId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.eking.tourism.repository.entity.RealUser">
+    update t_tourism_real_user
+    set NAME = #{name,jdbcType=VARCHAR},
+      PAPERS_NUMBER = #{papersNumber,jdbcType=VARCHAR},
+      FACE_PHOTO_PATH = #{facePhotoPath,jdbcType=VARCHAR},
+      MOBILE_PHONE_NUMBER = #{mobilePhoneNumber,jdbcType=VARCHAR},
+      CREATE_BY_OPEN_ID = #{createByOpenId,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=DATE},
+      TICKET_ORDER_ID = #{ticketOrderId,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

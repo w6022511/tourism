@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.eking.tourism.repository.mapper.OrderMapper">
+  <resultMap id="BaseResultMap" type="org.eking.tourism.repository.entity.OrderShowVo">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="TICKET_NAME" jdbcType="VARCHAR" property="ticketName" />
+    <result column="TICKET_COUNT" jdbcType="INTEGER" property="ticketCount" />
+    <result column="CREATE_DATE" jdbcType="INTEGER" property="createDate" />
+    <result column="UPDATE_DATE" jdbcType="INTEGER" property="updateDate" />
+    <result column="ORDER_STATUS" jdbcType="VARCHAR" property="orderStatus" />
+    <result column="OPEN_ID" jdbcType="VARCHAR" property="openId" />
+    <result column="REAL_USER_ID" jdbcType="INTEGER" property="realUserId" />
+    <result column="QR_CODE_ID" jdbcType="VARCHAR" property="qrCodeId" />
+
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="PAPERS_NUMBER" jdbcType="VARCHAR" property="papersNumber" />
+    <result column="FACE_PHOTO_PATH" jdbcType="VARCHAR" property="facePhotoPath" />
+    <result column="MOBILE_PHONE_NUMBER" jdbcType="VARCHAR" property="mobilePhoneNumber" />
+    <result column="RECOGNITION_TYPE" jdbcType="VARCHAR" property="recognitionType" />
+    <result column="access_date" jdbcType="TIMESTAMP" property="accessDate" />
+
+
+
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID, TICKET_NAME, TICKET_COUNT, CREATE_DATE, UPDATE_DATE, ORDER_STATUS, OPEN_ID, REAL_USER_ID,
+    QR_CODE_ID
+  </sql>
+
+  <select id="page"  resultMap="BaseResultMap" parameterType="org.eking.tourism.repository.entity.Order">
+
+    SELECT O.ID,O.TICKET_NAME,O.TICKET_COUNT,O.CREATE_DATE,O.ORDER_STATUS,S.RECOGNITION_TYPE,S.ACCESS_DATE,S.NAME,S.MOBILE_PHONE_NUMBER,S.PAPERS_NUMBER,S.FACE_PHOTO_PATH FROM
+     T_TOURISM_TICKET_ORDER O LEFT JOIN
+	  (SELECT A.*,R.NAME,R.MOBILE_PHONE_NUMBER,R.PAPERS_NUMBER,R.FACE_PHOTO_PATH FROM
+	    T_TOURISM_ACCESS_LOG A LEFT JOIN
+	      T_TOURISM_REAL_USER R ON A.REAL_USER_ID = R.ID) S ON O.ID = S.TICKET_ORDER_ID
+    WHERE 1 = 1
+    <if test="orderStatus != null and openId !='' ">
+      AND O.ORDER_STATUS = #{orderStatus,jdbcType=VARCHAR}
+    </if>
+    <if test="openId!= null and openId !='' ">
+      AND O.OPEN_ID = #{openId,jdbcType=VARCHAR}
+    </if>
+    ORDER BY ACCESS_DATE DESC
+
+  </select>
+
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_tourism_ticket_order
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_tourism_ticket_order
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.eking.tourism.repository.entity.Order">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_tourism_ticket_order (TICKET_NAME, TICKET_COUNT,
+      CREATE_DATE, UPDATE_DATE, ORDER_STATUS, 
+      OPEN_ID, REAL_USER_ID, QR_CODE_ID
+      )
+    values (#{ticketName,jdbcType=VARCHAR}, #{ticketCount,jdbcType=INTEGER},
+      #{createDate,jdbcType=INTEGER}, #{updateDate,jdbcType=INTEGER}, #{orderStatus,jdbcType=VARCHAR}, 
+      #{openId,jdbcType=VARCHAR}, #{realUserId,jdbcType=INTEGER}, #{qrCodeId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.eking.tourism.repository.entity.Order">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_tourism_ticket_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      ID,
+      <if test="ticketName != null">
+        TICKET_NAME,
+      </if>
+      <if test="ticketCount != null">
+        TICKET_COUNT,
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE,
+      </if>
+      <if test="updateDate != null">
+        UPDATE_DATE,
+      </if>
+      <if test="orderStatus != null">
+        ORDER_STATUS,
+      </if>
+      <if test="openId != null">
+        OPEN_ID,
+      </if>
+      <if test="realUserId != null">
+        REAL_USER_ID,
+      </if>
+      <if test="qrCodeId != null">
+        QR_CODE_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=INTEGER},
+      <if test="ticketName != null">
+        #{ticketName,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketCount != null">
+        #{ticketCount,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=INTEGER},
+      </if>
+      <if test="orderStatus != null">
+        #{orderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="openId != null">
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="realUserId != null">
+        #{realUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="qrCodeId != null">
+        #{qrCodeId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.eking.tourism.repository.entity.Order">
+    update t_tourism_ticket_order
+    <set>
+      <if test="ticketName != null">
+        TICKET_NAME = #{ticketName,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketCount != null">
+        TICKET_COUNT = #{ticketCount,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE = #{createDate,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        UPDATE_DATE = #{updateDate,jdbcType=INTEGER},
+      </if>
+      <if test="orderStatus != null">
+        ORDER_STATUS = #{orderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="openId != null">
+        OPEN_ID = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="realUserId != null">
+        REAL_USER_ID = #{realUserId,jdbcType=INTEGER},
+      </if>
+      <if test="qrCodeId != null">
+        QR_CODE_ID = #{qrCodeId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.eking.tourism.repository.entity.Order">
+    update t_tourism_ticket_order
+    set TICKET_NAME = #{ticketName,jdbcType=VARCHAR},
+      TICKET_COUNT = #{ticketCount,jdbcType=INTEGER},
+      CREATE_DATE = #{createDate,jdbcType=INTEGER},
+      UPDATE_DATE = #{updateDate,jdbcType=INTEGER},
+      ORDER_STATUS = #{orderStatus,jdbcType=VARCHAR},
+      OPEN_ID = #{openId,jdbcType=VARCHAR},
+      REAL_USER_ID = #{realUserId,jdbcType=INTEGER},
+      QR_CODE_ID = #{qrCodeId,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

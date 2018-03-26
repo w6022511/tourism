@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.eking.tourism.repository.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="org.eking.tourism.repository.entity.User">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="OPEN_ID" jdbcType="VARCHAR" property="openId" />
+    <result column="NICK_NAME" jdbcType="VARCHAR" property="nickName" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="PHONE_NUMBER" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="CARD_ID" jdbcType="VARCHAR" property="cardId" />
+    <result column="CREATE_DATE" jdbcType="INTEGER" property="createDate" />
+    <result column="UPDATE_DATE" jdbcType="INTEGER" property="updateDate" />
+    <result column="SEX" jdbcType="VARCHAR" property="sex" />
+    <result column="HEAD_IMAGE" jdbcType="VARCHAR" property="headImage" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, OPEN_ID, NICK_NAME, NAME, PHONE_NUMBER, CARD_ID, CREATE_DATE, UPDATE_DATE, SEX, 
+    HEAD_IMAGE
+  </sql>
+  <select id="selectByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_tourism_wx_user
+    where OPEN_ID = #{openId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_tourism_wx_user
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.eking.tourism.repository.entity.User">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_tourism_wx_user (OPEN_ID, NICK_NAME,
+      NAME, PHONE_NUMBER, CARD_ID, 
+      CREATE_DATE, UPDATE_DATE, SEX, 
+      HEAD_IMAGE)
+    values (#{openId,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR},
+      #{name,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}, #{cardId,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=INTEGER}, #{updateDate,jdbcType=INTEGER}, #{sex,jdbcType=VARCHAR}, 
+      #{headImage,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="org.eking.tourism.repository.entity.User">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_tourism_wx_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      ID,
+      <if test="openId != null">
+        OPEN_ID,
+      </if>
+      <if test="nickName != null">
+        NICK_NAME,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="phoneNumber != null">
+        PHONE_NUMBER,
+      </if>
+      <if test="cardId != null">
+        CARD_ID,
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE,
+      </if>
+      <if test="updateDate != null">
+        UPDATE_DATE,
+      </if>
+      <if test="sex != null">
+        SEX,
+      </if>
+      <if test="headImage != null">
+        HEAD_IMAGE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=INTEGER},
+      <if test="openId != null">
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="cardId != null">
+        #{cardId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="headImage != null">
+        #{headImage,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.eking.tourism.repository.entity.User">
+    update t_tourism_wx_user
+    <set>
+      <if test="openId != null">
+        OPEN_ID = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+        NICK_NAME = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        PHONE_NUMBER = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="cardId != null">
+        CARD_ID = #{cardId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE = #{createDate,jdbcType=INTEGER},
+      </if>
+      <if test="updateDate != null">
+        UPDATE_DATE = #{updateDate,jdbcType=INTEGER},
+      </if>
+      <if test="sex != null">
+        SEX = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="headImage != null">
+        HEAD_IMAGE = #{headImage,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.eking.tourism.repository.entity.User">
+    update t_tourism_wx_user
+    set OPEN_ID = #{openId,jdbcType=VARCHAR},
+      NICK_NAME = #{nickName,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      PHONE_NUMBER = #{phoneNumber,jdbcType=VARCHAR},
+      CARD_ID = #{cardId,jdbcType=VARCHAR},
+      CREATE_DATE = #{createDate,jdbcType=INTEGER},
+      UPDATE_DATE = #{updateDate,jdbcType=INTEGER},
+      SEX = #{sex,jdbcType=VARCHAR},
+      HEAD_IMAGE = #{headImage,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

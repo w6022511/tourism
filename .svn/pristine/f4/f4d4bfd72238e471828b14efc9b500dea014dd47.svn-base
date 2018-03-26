@@ -1,0 +1,24 @@
+package org.eking.tourism.module.message.controller;
+
+import org.eking.tourism.common.constant.MessageConstant;
+import org.eking.tourism.module.wechat.entity.MessageText;
+import org.eking.tourism.common.utils.MessageUtil;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
+
+@RestController
+public class MessageController {
+
+    @GetMapping("/message")
+    public String messageResponse(HttpServletRequest request, HttpServletResponse response){
+        return "你真棒";
+    }
+}
