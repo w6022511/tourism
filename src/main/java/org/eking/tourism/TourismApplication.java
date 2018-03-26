@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 @SpringBootApplication
 @Service
-@Deprecated
 public class TourismApplication {
 
 	public static void main(String[] args) {
