@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 public class TourismApplication {
 
 	public static void main(String[] args) {
+		System.out.println(123)
 		SpringApplication.run(TourismApplication.class, args);
 	}
 }
