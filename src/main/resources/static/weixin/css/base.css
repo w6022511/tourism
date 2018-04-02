@@ -79,8 +79,8 @@ html{font-size: 117.1875px;}
 @media (min-device-width : 414px) and (max-device-width : 736px) and (-webkit-min-device-pixel-ratio : 3){
  html{font-size: 129.375px;}
  }
-*/ 
- 
+*/
+
 
 
 /* iPhone6的375px尺寸作为16px基准*/
@@ -90,42 +90,42 @@ html {
 
 /* 320/375*100*/
 @media screen and (max-width:320px) {
-	html {
-		font-size: 85.3px;
-	}
+    html {
+        font-size: 85.3px;
+    }
 }
 
 @media screen and (max-width:360px) {
-	html {
-		font-size: 100px;
-	}
+    html {
+        font-size: 100px;
+    }
 }
 
- /* iPhone6的375px尺寸作为16px基准，414px正好18px大小, 600 20px,百分比为：(375/375*100)/16*100 */
+/* iPhone6的375px尺寸作为16px基准，414px正好18px大小, 600 20px,百分比为：(375/375*100)/16*100 */
 @media screen and (min-width: 375px) {
-html {
-	font-size: calc(625% + 2 * (100vw - 375px)/ 39);
-	font-size: calc(100px + 2 * (100vw - 375px)/ 39);
+    html {
+        font-size: calc(625% + 2 * (100vw - 375px) / 39);
+        font-size: calc(100px + 2 * (100vw - 375px) / 39);
+    }
 }
- 
- /* 414px-1000px每100像素宽字体增加1px(18px-22px) ,百分比为：(414/375*100)/16*100 */ 
-@media screen and (min-width:414px) {
-	html {
-		font-size: calc(690% + 4 * (100vw - 414px)/ 586);
-		font-size: calc(110.4px + 4 * (100vw - 414px)/ 586);
-	}
-}
+    /* 414px-1000px每100像素宽字体增加1px(18px-22px) ,百分比为：(414/375*100)/16*100 */
+    @media screen and (min-width:414px) {
+        html {
+            font-size: calc(690% + 4 * (100vw - 414px)/ 586);
+            font-size: calc(110.4px + 4 * (100vw - 414px)/ 586);
+        }
+    }
 
-@media screen and (min-width:600px) {
-	html {
-		font-size: calc(1000% + 4 * (100vw - 600px)/ 400);
-		font-size: calc(160px + 4 * (100vw - 600px)/ 400);
-	}
-}
+    @media screen and (min-width:600px) {
+        html {
+            font-size: calc(1000% + 4 * (100vw - 600px)/ 400);
+            font-size: calc(160px + 4 * (100vw - 600px)/ 400);
+        }
+    }
 
-@media screen and (min-width:1000px) {
-	html {
-		font-size: calc(1666.667% + 6 * (100vw - 1000px)/ 1000);
-		font-size: calc(266.267px + 6 * (100vw - 1000px)/ 1000);
-	}
-}
+    @media screen and (min-width:1000px) {
+        html {
+            font-size: calc(1666.667% + 6 * (100vw - 1000px)/ 1000);
+            font-size: calc(266.267px + 6 * (100vw - 1000px)/ 1000);
+        }
+    }
