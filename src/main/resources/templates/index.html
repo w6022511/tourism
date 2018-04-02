@@ -113,16 +113,11 @@
 </div>
 <!---->
 <script type="text/javascript" src="js/jquery-2.2.0.min.js"></script> 
-<script type="text/javascript" src="js/swiper.min.js"></script> 
+<script type="text/javascript" src="js/swiper.min.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
 <script>
-  var apiServer = 'http://localhost:8080/wechat'
-  function intToDate(date) {
-      var jsonDate=new Date(date*1000);
-      var year= jsonDate.getFullYear();
-      var month= jsonDate.getMonth() + 1;
-      var date= jsonDate.getDate();
-      return  year + "-" + month + "-" + date;
-  }
+
+
 $(function(){ 	
 	  $('[data-role="cir"]').each(function(){
 		 var loginDash = $(this).find(".pb_dash").text();

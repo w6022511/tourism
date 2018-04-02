@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no, email=no"/>
+    <link rel="stylesheet" type="text/css" href="weixin/css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="weixin/css/all.css"/>
+    <link rel="stylesheet" type="text/css" href="weixin/css/swiper.css"/>
+    <title></title>
+</head>
+<body>
+<div class="main">
+    <div class="cell over_auto">
+        <!---->
+        <div class="swiper-container">
+            <div class="swiper-wrapper" id="swiper">
+                <div class="swiper-slide"><img src="weixin/images/banner01.jpg" width="100%"></div>
+                <div class="swiper-slide"><img src="weixin/images/banner01.jpg" width="100%"></div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+        <!---->
+        <div class="p10 f16 w_bg">
+            <p id="ticketName">电影公社成人票【含1942民国街+南洋街】</p>
+            <p>海口电影公社通票</p>
+            <p>海口电影公社通票—限海南本地居民使用</p>
+        </div>
+        <div class="p_info w_bg mui_flex">
+            <span class="cell">单价 <em class="c_yellow">¥128</em></span>
+            <span class="p_r10">购买数量</span>
+            <span class="num_box">
+        <button type="button" class="num_minus">-</button>
+        <input type="text" class="num_input" id="ticketCount" value="1">
+        <button type="button" class="num_plus">+</button>
+      </span>
+        </div>
+        <div class="n_list m_t10 m_b10 w_bg">
+            <h2>预订人信息<input type="text" id = "openId" hidden></h2>
+            <ul>
+                <li class="mui_flex"><label class="n_label">姓名</label><span class="cell"><input type="text"
+                                                                                                class="input_txt"
+                                                                                                id="name"
+                                                                                                placeholder="请输入姓名"></span>
+                </li>
+                <li class="mui_flex"><label class="n_label">手机号</label><span class="cell"><input type="text"
+                                                                                                 class="input_txt"
+                                                                                                 id="mobilePhoneNumber"
+                                                                                                 placeholder="请输入接收电子票的手机号码"></span>
+                </li>
+                <li class="mui_flex"><label class="n_label">身份证号</label><span class="cell id_txt"><input type="text"
+                                                                                                         class="input_txt"
+                                                                                                         id="papersNumber"
+                                                                                                         placeholder="购买本地身份证票请输入身份证号码，刷身份证过闸"></span>
+                </li>
+                <li class="mui_flex"><label class="n_label">人像采集</label><span class="cell" id="user_pic"><input
+                        type="text" class="input_txt" id="facePhotoPath" placeholder="采集人脸识别快速通道过闸" disabled></span><i
+                        class="n_arrow"></i></li>
+            </ul>
+        </div>
+        <div class="pic_main" style="display: none!important;" id ="pic_main">
+            <div class="cell over_auto w_bg">
+                <div class="user_pic"><img src = "weixin/images/mm.jpg" id = "picture"></div>
+                <div class="pic_action">
+                    <ul class="mui_flex">
+
+                        <li class="cell" onclick="takePicture()"><i class="icon120 pic_icon"></i><span class="d_p_b m_t5">照片</span></li>
+                        <li class="cell" id="submit"><i class="icon120 photo_icon"></i><span class="d_p_b m_t5">确定</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p_action w_bg mui_flex">
+        <span class="cell p_l10 c_yellow p_relative">应付总额：¥ <em class="f24" id = "price"></em><a class="p_tips">预订须知</a></span>
+        <button class="p_btn" id="p_btn">提交</button>
+    </div>
+</div>
+<script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="js/swiper.min.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<script type="text/javascript" src="js/wx.js"></script>
+<script type="text/javascript">
+    $("#picture_main").hide()
+
+    //图片滚动
+    var mySwiper = new Swiper('.swiper-container', {
+        autoplay: 4000,
+        autoplayDisableOnInteraction: false,
+        loop: true,
+        pagination: '.swiper-pagination',
+        paginationElement: 'li'
+    });
+
+    var price = window.document.getElementById("price");
+    price.innerHTML = parseInt(document.getElementById("ticketCount").value)*128
+    //票数加减
+    $(".num_plus").click(function () {
+        var count = parseInt(document.getElementById("ticketCount").value)
+        document.getElementById('ticketCount').value = count + 1
+        price.innerHTML = parseInt(document.getElementById("ticketCount").value)*128
+    })
+    $(".num_minus").click(function () {
+        var count = parseInt(document.getElementById("ticketCount").value)
+        if (count > 1) {
+            document.getElementById('ticketCount').value = count - 1
+        }else{
+            document.getElementById('ticketCount').value = 1
+        }
+        price.innerHTML = parseInt(document.getElementById("ticketCount").value)*128
+    })
+
+
+
+    getSession("openId");
+    //下单
+    $("#p_btn").click(function () {
+        //var openId = $("#openId").val()
+        var data1 = { 'ticketName': $("#ticketName").text(),
+                    'ticketCount': $("#ticketCount").val(),
+                    'name': $("#name").val(),
+                    'papersNumber': $("#papersNumber").val(),
+                    'facePhotoPath': facePhoto,
+                    'mobilePhoneNumber': $("#mobilePhoneNumber").val(),
+                    'openId': openId
+                   }
+       $.ajax({
+            type: "POST",
+            url: apiServer+"/createOrder",
+            contentType: "application/json", //必须有
+            dataType: "json", //表示返回值类型，不必须
+            data: JSON.stringify(data1),
+            success: function (jsonResult) {
+                if(jsonResult.errorCode ==  'E_000'){
+                    alert(jsonResult.message)
+                    //1秒后关闭微信页面
+                    setTimeout(function(){WeixinJSBridge.call('closeWindow')},1000);
+                }else {
+                    alert(jsonResult.message)
+                }
+            }
+        })
+    })
+
+    //照片采集
+    $("#user_pic").click(function () {
+        $("#pic_main").show()
+        //window.location.href = apiServer + '/userPicture'
+    })
+    function takePicture(){
+        wx.chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+            success: function (res) {
+                var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                wx.uploadImage({
+                    localId: localIds.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {
+                        var mediaId = res.serverId; // 返回图片的服务器端ID，即mediaId
+                        $("#picture").attr('src',localIds)
+                       $.ajax({
+                           url:apiServer+"/getMedia?mediaId="+mediaId,
+                           type: "get",
+                           success:function (res) {
+                               $("#facePhotoPath").val(res.body)
+                           }
+
+                         })
+                    },
+                    fail: function (res) {
+                        alertModal('上传图片失败，请重试')
+                    }
+                });
+            }
+        });
+    }
+    //确认图片
+    $("#submit").click(function () {
+        facePhoto = $("#facePhotoPath").val()
+        $("#pic_main").fadeOut()
+
+
+    })
+</script>
+</body>
+</html>

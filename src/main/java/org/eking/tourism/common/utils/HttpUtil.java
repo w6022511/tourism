@@ -12,7 +12,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
 * http工具类
@@ -40,6 +45,7 @@ public class HttpUtil {
 
                 String result = EntityUtils.toString(entity);
                 //String result =  new String(EntityUtils.toString(entity).getBytes("UTF-8"),"ISO-8859-1");
+                //System.err.println(result);
                 jsonObject = JSONObject.fromObject(result);
             }
         } catch (IOException e) {
@@ -72,6 +78,7 @@ public class HttpUtil {
         }
         return jsonObject;
     }
+
 
 
 }

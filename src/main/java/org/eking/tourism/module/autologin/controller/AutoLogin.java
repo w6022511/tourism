@@ -1,10 +1,14 @@
 package org.eking.tourism.module.autologin.controller;
 
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.eking.tourism.common.constant.WeChatAPIConstant;
 import org.eking.tourism.common.utils.HttpUtil;
+import org.eking.tourism.common.utils.WeChatUtil;
 import org.eking.tourism.module.user.service.UserService;
 import org.eking.tourism.repository.entity.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,20 +24,24 @@ import java.net.URLEncoder;
 public class AutoLogin {
 
     @Value("${wechat.AppID}")
-    private String APPID;
+    String APPID;
+    @Autowired
+    private WeChatUtil weChatUtil;
 
-    @Value("${wechat.AppSecret}")
-    String APPSECRET;
+    @Value("${wechat.domain}")
+    String domain;
 
     @Autowired
     private UserService userService;
+
+    private Logger logger = LoggerFactory.getLogger(AutoLogin.class);
 
     @GetMapping("/login")
     public void getCode(HttpServletResponse response){
         //System.err.println(APPID);
         String url = WeChatAPIConstant.USER_AUTHORIZE_URL;
 
-        String backUrl = "http://wjxqvx.natappfree.cc/wechat/callBack";
+        String backUrl = domain+"/callBack";
 
         String scope = "snsapi_userinfo";
 
@@ -56,21 +64,27 @@ public class AutoLogin {
     *
     */
     @GetMapping("/callBack")
-    public JSONObject callBack(HttpServletRequest request,HttpServletResponse response){
-
+    public void callBack(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        System.err.println("callback");
         String code = request.getParameter("code");
-        //获取access_token和openid
-        String url = WeChatAPIConstant.LOGIN_ACCESS_TOKEN_URL.replace("APPID",APPID)
-                .replace("SECRET",APPSECRET)
-                .replace("CODE",code);
+        //获取openid
+        logger.info(code);
+        String url = (String) request.getSession().getAttribute("requestUrl");
+        logger.info("url--------------"+url);
+        String paramUrlStr = null;
+        if (StringUtils.isNotBlank(code)){
+            String openId = weChatUtil.getOpenid(code);
+            request.getSession().setAttribute("openId",openId);
+            System.err.println(openId);
+            paramUrlStr =url+"?openId="+openId;
+            logger.info("paramUrlStr=" + paramUrlStr);
+            response.sendRedirect(paramUrlStr);
+            return;
+        }
 
-        JSONObject jsonObject = HttpUtil.doGet(url);
-
-        String openid = jsonObject.getString("openid");
-        String access_token = jsonObject.getString("access_token");
 
         //拉取用户信息
-        String infoUrl = WeChatAPIConstant.GET_USER_INFO_URL.replace("ACCESS_TOKEN",access_token)
+        /*String infoUrl = WeChatAPIConstant.GET_USER_INFO_URL.replace("ACCESS_TOKEN",access_token)
                 .replace("OPENID",openid);
 
         JSONObject userInfo = HttpUtil.doGet(infoUrl);
@@ -84,6 +98,7 @@ public class AutoLogin {
         }
         JSONObject userInfoResult = JSONObject.fromObject(result);
 
+
         //判断数据有无此openID，没有则新建
         if(userService.getUserByOpenId(openid) == null){
             User user = new User();
@@ -92,8 +107,8 @@ public class AutoLogin {
             user.setSex(userInfoResult.getString("sex"));
             user.setHeadImage(userInfoResult.getString("headimgurl"));
             userService.createUser(user);
-        }
-        return userInfoResult;
+        }*/
+        //return userInfoResult;
 
     }
 }

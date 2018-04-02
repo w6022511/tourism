@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no, email=no" />
+<link rel="stylesheet"  type="text/css" href="weixin/css/base.css" />
+<link rel="stylesheet"  type="text/css" href="weixin/css/all.css" />
+<link rel="stylesheet"  type="text/css" href="weixin/css/swiper.css" />
+<title></title>
+</head>
+<body>
+<div class="main">
+  <div class="cell over_auto">
+    <div class="p10">
+      <div class="b_box w_bg" id = "order_info">
+
+      </div>
+      <div class="b_box w_bg m_t10">
+        <div class="p10">
+          <ul class="mui_flex" id = "order_info2">
+          </ul>
+        </div>
+        <div class="p10"><i class="d_p_b bdt"></i></div>
+        <div class="t_c p_b10"><span class="f16 c_blue" id="qrCode">查看我的入园凭证</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="js/swiper.min.js"></script>
+<script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<!--<script type="text/javascript">
+
+  alert(1)
+
+  var orderId = getUrlParameter(orderId)
+  alert(orderId)
+    $("#qrCode").click(function () {
+        window.location.href = apiServer + "/qrCode"
+
+    })
+</script>-->
+<script th:inline="javascript">
+    var div = window.document.getElementById("order_info");
+    var ul = window.document.getElementById("order_info2");
+    var orderId = [[${orderId}]];
+
+    $.ajax({
+        url:apiServer+'/getOrderById/'+orderId,
+        type:'get',
+        success:function (res) {
+            console.log(res.body)
+            var str = "";
+            var str2="";
+            var data = res.body;
+            var createDate = intToDateInfo(data.createDate)
+            var accessDate = formatDate(new Date(data.accessDate))
+            var price = data.ticketCount * 128
+            var orderStatus = ""
+            if(data.orderStatus =="2"){
+                orderStatus = "已确认"
+            }else if(data.orderStatus =="1"){
+                orderStatus = "待确认"
+                accessDate = ""
+            }
+
+            str +=
+            '<div class="d_tit t_c f16">'+data.ticketName+'</div>'+
+                '<div class="p10">'+
+                '<p class="mui_flex"><label class="item_label">订单编号</label><span class="cell p_l20">'+orderId+'</span></p>'+
+                '<p class="mui_flex m_t10"><label class="item_label">订单状态</label><span class="cell p_l20">'+orderStatus+'</span></p>'+
+            '<p class="mui_flex m_t10"><label class="item_label">下单时间</label><span class="cell p_l20">'+createDate+'</span></p>'+
+            '<p class="mui_flex m_t10"><label class="item_label">订单总额</label><span class="cell p_l20"><em class="c_yellow">¥ '+price+'</em></span></p>'+
+            '</div>'+
+            '<div class="cut_line"></div>'+
+            ' <div class="p10">'+
+            '<p class="mui_flex"><label class="item_label">预订人姓名</label><span class="cell p_l20">'+data.name+'</span></p>'+
+            '<p class="mui_flex m_t10"><label class="item_label">手机号</label><span class="cell p_l20">'+data.mobilePhoneNumber+'</span></p>'+
+            '<p class="mui_flex m_t10"><label class="item_label">身份证号</label><span class="cell p_l20">'+data.papersNumber+'</span></p>'+
+            '<p class="mui_flex m_t10"><label class="item_label">验证日期</label><span class="cell p_l20"><em class="c_yellow">'+accessDate+'</em></span></p>'+
+            '</div>'
+
+            str2 +=
+            '<li class="cell"><label class="c_gray">购买数量</label><span class="d_p_b m_t5"><em class="f18">'+data.ticketCount+'</em> 张</span></li>'+
+            '<li class="cell"><label class="c_gray">入园方式</label><span class="d_p_b m_t5 f18">'+'二维码验证'+'</span></li>'
+
+            div.innerHTML = str;
+            ul.innerHTML = str2;
+        }
+    })
+
+  //查看入园凭证
+    $("#qrCode").click(function () {
+        window.location.href = apiServer + "/qrCode"
+
+    })
+</script>
+</body>
+</html>

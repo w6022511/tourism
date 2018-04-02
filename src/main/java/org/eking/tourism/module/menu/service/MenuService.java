@@ -2,13 +2,14 @@ package org.eking.tourism.module.menu.service;
 
 import net.sf.json.JSONObject;
 import org.eking.tourism.common.constant.WeChatAPIConstant;
-import org.eking.tourism.common.utils.AccessTokenUtil;
+import org.eking.tourism.common.utils.WeChatUtil;
 import org.eking.tourism.common.utils.HttpUtil;
 import org.eking.tourism.common.wechatentities.Button;
 import org.eking.tourism.common.wechatentities.ClickButton;
 import org.eking.tourism.common.wechatentities.Menu;
 import org.eking.tourism.common.wechatentities.ViewButton;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -22,7 +23,10 @@ import java.io.UnsupportedEncodingException;
 public class MenuService {
 
     @Autowired
-    private AccessTokenUtil accessTokenUtil;
+    private WeChatUtil accessTokenUtil;
+
+    @Value("${wechat.domain}")
+    private String domain;
 
     /**
      * 创建菜单
@@ -32,8 +36,10 @@ public class MenuService {
      */
     public JSONObject createMenu(String menu){
         //int result = Integer.MIN_VALUE;
+        String newMenu = menu.replaceAll("domain",domain);
+        System.err.println(newMenu);
         String url = WeChatAPIConstant.CTRATE_MENU_URL.replace("ACCESS_TOKEN", accessTokenUtil.getAccessToken().getAccess_token());
-        JSONObject json = HttpUtil.doPost(url, menu);
+        JSONObject json = HttpUtil.doPost(url, newMenu);
         /*if(json!=null){
             //从返回的数据包中取数据{"errcode":0,"errmsg":"ok"}
             result = json.getInt("errcode");

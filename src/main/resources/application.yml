@@ -6,8 +6,11 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://10.28.120.80:3306/exhibition_entrance_guard?useUnicode=true&characterEncoding=utf-8
+    #url: jdbc:mysql://localhost:3306/test
+    #password: w1988112
     username: root
     password: root
+
   thymeleaf:
     #调试时可用false
     cache: false
@@ -24,6 +27,7 @@ wechat:
   AppID: wx672925c243ea0aaf
   AppSecret: 6943cad5170d4c9bbd8d31751bb2b43b
   token: eking666
+  domain: http://5aszk8.natappfree.cc/wechat
 #mybatis
 mybatis:
   config-locations: classpath:mybatis/mybatis-config.xml

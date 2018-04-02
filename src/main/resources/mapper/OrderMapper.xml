@@ -48,10 +48,12 @@
 
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from t_tourism_ticket_order
-    where ID = #{id,jdbcType=INTEGER}
+    SELECT O.ID,O.TICKET_NAME,O.TICKET_COUNT,O.CREATE_DATE,O.ORDER_STATUS,S.RECOGNITION_TYPE,S.ACCESS_DATE,S.NAME,S.MOBILE_PHONE_NUMBER,S.PAPERS_NUMBER,S.FACE_PHOTO_PATH FROM
+     T_TOURISM_TICKET_ORDER O LEFT JOIN
+	  (SELECT A.*,R.NAME,R.MOBILE_PHONE_NUMBER,R.PAPERS_NUMBER,R.FACE_PHOTO_PATH FROM
+	    T_TOURISM_ACCESS_LOG A LEFT JOIN
+	      T_TOURISM_REAL_USER R ON A.REAL_USER_ID = R.ID) S ON O.ID = S.TICKET_ORDER_ID
+          where O.ID = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_tourism_ticket_order

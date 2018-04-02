@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no, email=no" />
+<link rel="stylesheet"  type="text/css" href="weixin/css/base.css" />
+<link rel="stylesheet"  type="text/css" href="weixin/css/all.css" />
+<link rel="stylesheet"  type="text/css" href="weixin/css/swiper.css" />
+<title></title>
+</head>
+<body>
+<div class="main">
+  <div class="cell over_auto">
+    <div class="n_item">
+      <ul id = "order_list">
+
+      </ul>
+    </div> 
+  </div>
+</div>
+<script type="text/javascript" src="js/swiper.min.js"></script>
+<script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<script type="text/javascript">
+
+  var ul = window.document.getElementById("order_list");
+
+  //获取openId
+  getSession("openId")
+  var data1 = {
+      'openId': openId
+  }
+
+  //订单列表
+  $.ajax({
+      type:'POST',
+      url: apiServer+"/orderPage",
+      contentType: "application/json", //必须有
+      dataType: "json", //表示返回值类型，不必须
+      data: JSON.stringify(data1),
+      success:function (res){
+          var str = "";
+          var data = res.body;
+          for(i in data){
+              var date = intToDateInfo(data[i].createDate)
+              var price = data[i].ticketCount * 128
+              var orderStatus = ""
+              if(data[i].orderStatus =="2"){
+                  orderStatus = "已确认"
+              }else if(data[i].orderStatus =="1"){
+                  orderStatus = "待确认"
+              }
+
+              str +=
+                '<li id = "order_info" onclick="getOrderInfo('+data[i].id+')">'+
+                  '<div class="item_tit mui_flex"><span class="cell">'+data[i].ticketName+'</span><span class="c_green">'+orderStatus+'</span></div>'+
+                   '<div class="mui_flex p10">'+
+                  '<div class="item_pic"><img src="weixin/images/banner01.jpg"></div>'+
+                   '<div class="cell">'+
+                    '<p><label class="item_label">下单时间</label>'+date+'</p>'+
+                    '<p><label class="item_label">购买数量</label>'+data[i].ticketCount+'</p>'+
+                    '<p><label class="item_label">订单总额</label><span class="c_yellow">¥ <em class="f16">'+price+'</em></span></p>'+
+                   '</div>'+
+                  '</div>'+
+               '</li>'
+          }
+          ul.innerHTML = str;
+      }
+  })
+
+  function getOrderInfo(orderId) {
+      window.location.href = apiServer+'/orderInfo?orderId='+orderId
+
+  }
+
+</script>
+</body>
+</html>

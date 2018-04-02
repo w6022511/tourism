@@ -178,4 +178,25 @@ public class OrderShowVo {
     public void setAccessDate(Date accessDate) {
         this.accessDate = accessDate;
     }
+
+    @Override
+    public String toString() {
+        return "OrderShowVo{" +
+                "id=" + id +
+                ", ticketName='" + ticketName + '\'' +
+                ", ticketCount=" + ticketCount +
+                ", createDate=" + createDate +
+                ", updateDate=" + updateDate +
+                ", orderStatus='" + orderStatus + '\'' +
+                ", openId='" + openId + '\'' +
+                ", realUserId=" + realUserId +
+                ", qrCodeId='" + qrCodeId + '\'' +
+                ", name='" + name + '\'' +
+                ", papersNumber='" + papersNumber + '\'' +
+                ", facePhotoPath='" + facePhotoPath + '\'' +
+                ", mobilePhoneNumber='" + mobilePhoneNumber + '\'' +
+                ", recognitionType=" + recognitionType +
+                ", accessDate=" + accessDate +
+                '}';
+    }
 }

@@ -3,7 +3,6 @@ package org.eking.tourism.module.menu.controller;
 import net.sf.json.JSONObject;
 import org.eking.tourism.common.common.ErrorCode;
 import org.eking.tourism.common.common.ServiceResult;
-import org.eking.tourism.common.utils.AccessTokenUtil;
 import org.eking.tourism.common.wechatentities.Menu;
 import org.eking.tourism.module.menu.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;

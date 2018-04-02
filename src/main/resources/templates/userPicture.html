@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no, email=no" />
+<link rel="stylesheet"  type="text/css" href="weixin/css/base.css" />
+<link rel="stylesheet"  type="text/css" href="weixin/css/all.css" />
+<title></title>
+</head>
+<body>
+<div class="main">
+  <div class="cell over_auto w_bg">
+    <div class="user_pic"><img src = "weixin/images/mm.jpg" id = "picture"></div>
+    <div class="pic_action">
+      <ul class="mui_flex">
+
+        <li class="cell" onclick="takePicture()"><i class="icon120 pic_icon"></i><span class="d_p_b m_t5">照片</span></li>
+        <li class="cell" id="submit"><i class="icon120 photo_icon"></i><span class="d_p_b m_t5">确定</span></li>
+      </ul>
+    </div>
+  </div>  
+</div>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<script type="text/javascript" src="js/wx.js"></script>
+<script type="text/javascript" >
+
+    function takePicture(){
+        wx.chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+            success: function (res) {
+                var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                //$("#picture").attr('src',localIds)
+                wx.uploadImage({
+                    localId: localIds.toString(), // 需要上传的图片的本地ID，由chooseImage接口获得
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {
+                        var mediaId = res.serverId; // 返回图片的服务器端ID，即mediaId
+                        $("#picture").attr('src',localIds)
+                        alert(mediaId)
+                       /* $.ajax({
+                          url:apiServer+"/getMedia?mediaId="+mediaId,
+                          type: "get",
+                          success:function (res) {
+                              console.log("success")
+                          }
+
+                        })*/
+                    },
+                    fail: function (res) {
+                        alertModal('上传图片失败，请重试')
+                    }
+                });
+            }
+        });
+    }
+    $("#submit").click(function () {
+        alert($("#picture")[0].src)
+        facePhoto = $("#picture")[0].src
+        window.history.go(-1)
+
+
+    })
+</script>
+</body>
+</html>

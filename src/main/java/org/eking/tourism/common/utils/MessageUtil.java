@@ -6,6 +6,8 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.eking.tourism.common.constant.MsgTypeConstant;
 import org.eking.tourism.module.wechat.entity.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -17,7 +19,11 @@ import java.util.*;
 * @Author wangyu
 * @Date 2018/3/14
 */
+@Component
 public class MessageUtil {
+
+    @Value("${wechat.domain}")
+    private String domain;
 
     /**
     *
@@ -26,7 +32,7 @@ public class MessageUtil {
     *@return
     *
     */
-    public static Map<String,String> xmlToMap(HttpServletRequest request){
+    public Map<String,String> xmlToMap(HttpServletRequest request){
         Map<String,String> map = new HashMap<>();
         SAXReader reader = new SAXReader();
         InputStream in = null;
@@ -59,14 +65,14 @@ public class MessageUtil {
     *@return
     *
     */
-    public static String textToXml(MessageText text){
+    public String textToXml(MessageText text){
 
         XStream xStream = new XStream();
         xStream.alias("xml",text.getClass());
         return xStream.toXML(text);
     }
 
-    public static String initMessage(String fromUserName, String toUserName,String content) {
+    public String initMessage(String fromUserName, String toUserName,String content) {
         MessageText text = new MessageText();
         text.setToUserName(fromUserName);
         text.setFromUserName(toUserName);
@@ -76,7 +82,7 @@ public class MessageUtil {
         return  textToXml(text);
     }
 
-    public static String subscribeMessage(){
+    public String subscribeMessage(){
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("欢迎关注！\n");
         stringBuffer.append("可使用语音回复'购票'获取门票信息");
@@ -90,7 +96,7 @@ public class MessageUtil {
     *@return
     *
     */
-    public static String newsToXml(MessageNews messageNews){
+    public String newsToXml(MessageNews messageNews){
 
         XStream xStream = new XStream();
         xStream.alias("xml",messageNews.getClass());
@@ -103,7 +109,7 @@ public class MessageUtil {
     * @Author wangyu
     * @Date 2018/3/20
     */
-    public static String newsToXml(MessageVoice messageVoice){
+    public String newsToXml(MessageVoice messageVoice){
 
         XStream xStream = new XStream();
         xStream.alias("xml",messageVoice.getClass());
@@ -114,14 +120,14 @@ public class MessageUtil {
      * @Author wangyu
      * @Date 2018/3/21
      */
-    public static String linkToXml(MessageLink messageLink){
+    public String linkToXml(MessageLink messageLink){
 
         XStream xStream = new XStream();
         xStream.alias("xml",messageLink.getClass());
         return xStream.toXML(messageLink);
     }
 
-    public static String initMessageNews(String fromUserName, String toUserName) {
+    public String initMessageNews(String fromUserName, String toUserName) {
         String message = null;
         List<News> newsList = new ArrayList<>();
         MessageNews messageNews =new MessageNews();
@@ -129,7 +135,7 @@ public class MessageUtil {
         News news = new News();
         news.setTitle("电影公社成人票【含1942民国街+南洋街】");
         news.setPicUrl("file:///C:/Users/w6022/Pictures/Camera%20Roll/CkZeblql9vHAsylQAADSTXg_Upc427.jpg");
-        news.setUrl("http://www.eking-tech.com/");
+        news.setUrl(domain+"/order");
         news.setDescription("nihaoa");
 
         News news1 = new News();

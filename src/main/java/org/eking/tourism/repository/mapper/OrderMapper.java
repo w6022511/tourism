@@ -32,7 +32,7 @@ public interface OrderMapper {
      *
      * @mbg.generated 2018-03-22
      */
-    Order selectByPrimaryKey(Integer id);
+    OrderShowVo selectByPrimaryKey(Integer id);
 
     /**
      *

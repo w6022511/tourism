@@ -4,6 +4,7 @@ import org.eking.tourism.repository.entity.AccessLog;
 import org.eking.tourism.repository.mapper.AccessLogMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -13,6 +14,7 @@ public class AccessLogService {
     @Autowired
     private AccessLogMapper accessLogMapper;
 
+    @Transactional
     public void insert(int orderId,int realUserId){
 
         AccessLog accessLog = new AccessLog();

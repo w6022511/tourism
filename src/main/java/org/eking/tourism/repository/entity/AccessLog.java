@@ -108,16 +108,16 @@ public class AccessLog {
     }
 
     /**
-     * 
-     * @return ACCESS_DATE 
+     *
+     * @return ACCESS_DATE
      */
     public Date getAccessDate() {
         return accessDate;
     }
 
     /**
-     * 
-     * @param accessDate 
+     *
+     * @param accessDate
      */
     public void setAccessDate(Date accessDate) {
         this.accessDate = accessDate;
