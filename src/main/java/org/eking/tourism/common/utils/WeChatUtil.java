@@ -10,6 +10,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 
@@ -50,7 +51,7 @@ public class WeChatUtil {
     *@return
     *
     */
-    public String getOpenid(String code) {
+    public JSONObject getOpenIdAndAccessToken(String code) {
 
         String url = WeChatAPIConstant.LOGIN_ACCESS_TOKEN_URL.replace("APPID",APPID)
                 .replace("SECRET",APPSECRET)
@@ -58,7 +59,7 @@ public class WeChatUtil {
 
         JSONObject jsonObject = HttpUtil.doGet(url);
 
-        return jsonObject.getString("openid");
+        return jsonObject;
     }
 
     public String getJSApiTicket(String accessToken) {
@@ -107,14 +108,14 @@ public class WeChatUtil {
      * @param mediaId
      *      媒体文件id
      * */
-    public String downloadMedia(String mediaId) {
+    public String downloadMedia(String mediaId) throws Exception {
 
         String filePath = null;
         String savePath = Class.class.getClass().getResource("/").getPath();
 
         String requestUrl = WeChatAPIConstant.GET_MEDIA.replace("MEDIA_ID",mediaId)
                 .replace("ACCESS_TOKEN",getAccessToken().getAccess_token());
-        try {
+
             URL url = new URL(requestUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setDoInput(true);
@@ -139,11 +140,7 @@ public class WeChatUtil {
             conn.disconnect();
             String info = String.format("下载媒体文件成功，filePath=" + filePath);
             System.out.println(info);
-        } catch (Exception e) {
-            filePath = null;
-            String error = String.format("下载媒体文件失败：%s", e);
-            System.out.println(error);
-        }
+
         return filePath;
     }
     /**

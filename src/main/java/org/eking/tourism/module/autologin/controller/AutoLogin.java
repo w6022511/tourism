@@ -65,49 +65,54 @@ public class AutoLogin {
     */
     @GetMapping("/callBack")
     public void callBack(HttpServletRequest request,HttpServletResponse response) throws IOException {
-        System.err.println("callback");
+        //System.err.println("callback");
         String code = request.getParameter("code");
         //获取openid
-        logger.info(code);
+        //logger.info(code);
         String url = (String) request.getSession().getAttribute("requestUrl");
         logger.info("url--------------"+url);
-        String paramUrlStr = null;
+        //String paramUrlStr = null;
         if (StringUtils.isNotBlank(code)){
-            String openId = weChatUtil.getOpenid(code);
+            JSONObject jsonObject = weChatUtil.getOpenIdAndAccessToken(code);
+            String openId = jsonObject.getString("openid");
+            String accessToken = jsonObject.getString("access_token");
             request.getSession().setAttribute("openId",openId);
-            System.err.println(openId);
-            paramUrlStr =url+"?openId="+openId;
-            logger.info("paramUrlStr=" + paramUrlStr);
-            response.sendRedirect(paramUrlStr);
+
+
+            //判断数据有无此openID，没有则新建
+            if(userService.getUserByOpenId(openId) == null){
+                //拉取用户信息
+
+                String infoUrl = WeChatAPIConstant.GET_USER_INFO_URL.replace("ACCESS_TOKEN",accessToken)
+                        .replace("OPENID",openId);
+
+                JSONObject userInfo = HttpUtil.doGet(infoUrl);
+
+                //解决返回的用户信息中文乱码
+                String result = null;
+                try {
+                    result = new String(userInfo.toString().getBytes("ISO-8859-1"), "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                JSONObject userInfoResult = JSONObject.fromObject(result);
+
+                User user = new User();
+                user.setOpenId(userInfoResult.getString("openid"));
+                user.setNickName(userInfoResult.getString("nickname"));
+                user.setSex(userInfoResult.getString("sex"));
+                user.setHeadImage(userInfoResult.getString("headimgurl"));
+                userService.createUser(user);
+            }
+            //System.err.println(openId);
+            //paramUrlStr =url+"?openId="+openId;
+            //logger.info("paramUrlStr=" + paramUrlStr);
+            response.sendRedirect(url);
             return;
         }
 
 
-        //拉取用户信息
-        /*String infoUrl = WeChatAPIConstant.GET_USER_INFO_URL.replace("ACCESS_TOKEN",access_token)
-                .replace("OPENID",openid);
 
-        JSONObject userInfo = HttpUtil.doGet(infoUrl);
-
-        //解决返回的用户信息中文乱码
-        String result = null;
-        try {
-             result = new String(userInfo.toString().getBytes("ISO-8859-1"), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        JSONObject userInfoResult = JSONObject.fromObject(result);
-
-
-        //判断数据有无此openID，没有则新建
-        if(userService.getUserByOpenId(openid) == null){
-            User user = new User();
-            user.setOpenId(userInfoResult.getString("openid"));
-            user.setNickName(userInfoResult.getString("nickname"));
-            user.setSex(userInfoResult.getString("sex"));
-            user.setHeadImage(userInfoResult.getString("headimgurl"));
-            userService.createUser(user);
-        }*/
         //return userInfoResult;
 
     }

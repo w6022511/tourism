@@ -44,29 +44,37 @@
       success:function (res){
           var str = "";
           var data = res.body;
-          for(i in data){
-              var date = intToDateInfo(data[i].createDate)
-              var price = data[i].ticketCount * 128
-              var orderStatus = ""
-              if(data[i].orderStatus =="2"){
-                  orderStatus = "已确认"
-              }else if(data[i].orderStatus =="1"){
-                  orderStatus = "待确认"
-              }
+          if (data.length == 0){
+              str+="<li>暂无订单</li>"
+              alert("暂无订单")
+              //0.5秒后关闭微信页面
+              setTimeout(function(){WeixinJSBridge.call('closeWindow')},500);
+          }else{
+              for(i in data){
+                  var date = intToDateInfo(data[i].createDate)
+                  var price = data[i].ticketCount * 128
+                  var orderStatus = ""
+                  if(data[i].orderStatus =="2"){
+                      orderStatus = "已确认"
+                  }else if(data[i].orderStatus =="1"){
+                      orderStatus = "待确认"
+                  }
 
-              str +=
-                '<li id = "order_info" onclick="getOrderInfo('+data[i].id+')">'+
-                  '<div class="item_tit mui_flex"><span class="cell">'+data[i].ticketName+'</span><span class="c_green">'+orderStatus+'</span></div>'+
-                   '<div class="mui_flex p10">'+
-                  '<div class="item_pic"><img src="weixin/images/banner01.jpg"></div>'+
-                   '<div class="cell">'+
-                    '<p><label class="item_label">下单时间</label>'+date+'</p>'+
-                    '<p><label class="item_label">购买数量</label>'+data[i].ticketCount+'</p>'+
-                    '<p><label class="item_label">订单总额</label><span class="c_yellow">¥ <em class="f16">'+price+'</em></span></p>'+
-                   '</div>'+
-                  '</div>'+
-               '</li>'
+                  str +=
+                      '<li id = "order_info" onclick="getOrderInfo('+data[i].id+')">'+
+                      '<div class="item_tit mui_flex"><span class="cell">'+data[i].ticketName+'</span><span class="c_green">'+orderStatus+'</span></div>'+
+                      '<div class="mui_flex p10">'+
+                      '<div class="item_pic"><img src="weixin/images/banner01.jpg"></div>'+
+                      '<div class="cell">'+
+                      '<p><label class="item_label">下单时间</label>'+date+'</p>'+
+                      '<p><label class="item_label">购买数量</label>'+data[i].ticketCount+'</p>'+
+                      '<p><label class="item_label">订单总额</label><span class="c_yellow">¥ <em class="f16">'+price+'</em></span></p>'+
+                      '</div>'+
+                      '</div>'+
+                      '</li>'
+              }
           }
+
           ul.innerHTML = str;
       }
   })

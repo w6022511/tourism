@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎使用</title>
+</head>
+<body>
+<script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+
+<script type="text/javascript">
+    getSession("openId")
+    $.ajax({
+        url:apiServer+"/getUserByOpenId/"+openId,
+        type: "get",
+        success:function (res) {
+            console.log(res)
+            alert("欢迎你，"+res.body.nickName)
+            //0.5秒后关闭微信页面
+            setTimeout(function(){WeixinJSBridge.call('closeWindow')},500);
+        }
+
+    })
+</script>
+</body>
+</html>

@@ -1,13 +1,11 @@
 package org.eking.tourism.module.index.controller;
 
-import net.sf.json.JSONObject;
 import org.eking.tourism.common.common.ServiceResult;
 import org.eking.tourism.common.interceptor.DoAuth;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,9 +63,10 @@ public class IndexController {
         return "userPicture";
     }
 
-    @GetMapping("/test")
-    public ModelAndView demo(){
-        return new ModelAndView("demo");
+    @DoAuth
+    @GetMapping("/welcome")
+    public String demo(){
+        return "welcome";
     }
     @GetMapping("/index1")
     public String index1(){

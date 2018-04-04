@@ -27,7 +27,7 @@ wechat:
   AppID: wx672925c243ea0aaf
   AppSecret: 6943cad5170d4c9bbd8d31751bb2b43b
   token: eking666
-  domain: http://5aszk8.natappfree.cc/wechat
+  domain: http://44pggn.natappfree.cc/wechat
 #mybatis
 mybatis:
   config-locations: classpath:mybatis/mybatis-config.xml

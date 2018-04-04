@@ -40,16 +40,12 @@ public class LoginInterceptor implements HandlerInterceptor {
         DoAuth doAuth = method.getAnnotation(DoAuth.class);
         //有注解则拦截
         if (doAuth != null){
-            logger.info("requestUrl-----------"+ request.getRequestURL().toString());
 
             //将请求URL存到session,完成授权后可直接跳转
             request.getSession().setAttribute("requestUrl",request.getRequestURL().toString());
-            logger.info("刚存上"+request.getSession().getAttribute("requestUrl").toString());
-
+            String requestUrl = request.getSession().getAttribute("requestUrl").toString();
             //从seession中获取openid，如果存在说明已经授权
             String openId = (String) request.getSession().getAttribute("openId");
-            logger.info("a--------------------"+openId);
-            System.err.println(request.getSession().getAttribute("requestUrl").toString());
 
             if (openId == null || openId.equals("")) {
 
@@ -63,7 +59,6 @@ public class LoginInterceptor implements HandlerInterceptor {
                         .replace("REDIRECT_URI", URLEncoder.encode(backUrl))//回调地址，必须能在公网访问
                         .replace("SCOPE", scope);
                 try {
-                    System.err.println(newUrl);
                     response.sendRedirect(newUrl);
                 } catch (IOException e) {
                     e.printStackTrace();

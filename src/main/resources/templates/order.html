@@ -12,8 +12,8 @@
     <title></title>
 </head>
 <body>
-<div class="main">
-    <div class="cell over_auto">
+<div class="main" >
+    <div class="cell over_auto" id = "b">
         <!---->
         <div class="swiper-container">
             <div class="swiper-wrapper" id="swiper">
@@ -60,25 +60,25 @@
                         class="n_arrow"></i></li>
             </ul>
         </div>
-        <div class="pic_main" style="display: none!important;" id ="pic_main">
-            <div class="cell over_auto w_bg">
-                <div class="user_pic"><img src = "weixin/images/mm.jpg" id = "picture"></div>
-                <div class="pic_action">
-                    <ul class="mui_flex">
+        <div class="p_action w_bg mui_flex">
+            <span class="cell p_l10 c_yellow p_relative">应付总额：¥ <em class="f24" id = "price"></em><a class="p_tips">预订须知</a></span>
+            <button class="p_btn" id="p_btn">提交</button>
+        </div>
+    </div>
+    <div class="pic_main" style="display: none!important;" id ="pic_main">
+        <div class="cell over_auto w_bg">
+            <div class="user_pic"><img src = "weixin/images/mm.jpg" id = "picture"></div>
+            <div class="pic_action">
+                <ul class="mui_flex">
 
-                        <li class="cell" onclick="takePicture()"><i class="icon120 pic_icon"></i><span class="d_p_b m_t5">照片</span></li>
-                        <li class="cell" id="submit"><i class="icon120 photo_icon"></i><span class="d_p_b m_t5">确定</span></li>
-                    </ul>
-                </div>
+                    <li class="cell" onclick="takePicture()"><i class="icon120 pic_icon"></i><span class="d_p_b m_t5">照片</span></li>
+                    <li class="cell" id="submit"><i class="icon120 photo_icon"></i><span class="d_p_b m_t5">确定</span></li>
+                </ul>
             </div>
         </div>
     </div>
-
-    <div class="p_action w_bg mui_flex">
-        <span class="cell p_l10 c_yellow p_relative">应付总额：¥ <em class="f24" id = "price"></em><a class="p_tips">预订须知</a></span>
-        <button class="p_btn" id="p_btn">提交</button>
-    </div>
 </div>
+
 <script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script type="text/javascript" src="js/swiper.min.js"></script>
@@ -148,8 +148,8 @@
 
     //照片采集
     $("#user_pic").click(function () {
-        $("#pic_main").show()
-        //window.location.href = apiServer + '/userPicture'
+        $("#b").toggle();
+        $("#pic_main").toggle();
     })
     function takePicture(){
         wx.chooseImage({
@@ -168,6 +168,7 @@
                            url:apiServer+"/getMedia?mediaId="+mediaId,
                            type: "get",
                            success:function (res) {
+                               alert(res.message)
                                $("#facePhotoPath").val(res.body)
                            }
 
@@ -178,14 +179,13 @@
                     }
                 });
             }
-        });
+        })
     }
     //确认图片
     $("#submit").click(function () {
         facePhoto = $("#facePhotoPath").val()
         $("#pic_main").fadeOut()
-
-
+        $("#b").toggle();
     })
 </script>
 </body>

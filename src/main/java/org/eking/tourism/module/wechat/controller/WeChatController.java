@@ -89,7 +89,12 @@ public class WeChatController {
     public ServiceResult getMedia(HttpServletRequest req){
         ServiceResult result =new ServiceResult();
         String mediaId = req.getParameter("mediaId");
-       return ServiceResultGenerator.genSuccessResult(weChatUtil.downloadMedia(mediaId));
+        try {
+            return ServiceResultGenerator.genSuccessResult(weChatUtil.downloadMedia(mediaId));
+        } catch (Exception e) {
+            String error = String.format("下载媒体文件失败：%s", e);
+            return ServiceResultGenerator.genErrorResult(error);
+        }
     }
 
 }

@@ -21,4 +21,6 @@ public class WeChatAPIConstant {
     public static final String JS_API_TICKET = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi";
     //获取临时素材接口
     public static final String GET_MEDIA = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=ACCESS_TOKEN&media_id=MEDIA_ID";
+    // 获取语音识别结果;lang:语言，zh_CN 或 en_US，默认中文
+    public static final String GET_VOICE_RESULT = "http://api.weixin.qq.com/cgi-bin/media/voice/queryrecoresultfortext?access_token=ACCESS_TOKEN&voice_id=xxxxxx&lang=zh_CN";
 }

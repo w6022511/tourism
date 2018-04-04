@@ -1,4 +1,4 @@
-var apiServer = 'http://5aszk8.natappfree.cc/wechat'
+var apiServer = 'http://44pggn.natappfree.cc/wechat'
 var openId = ""
 var facePhoto = ""
 

@@ -134,19 +134,19 @@ public class MessageUtil {
 
         News news = new News();
         news.setTitle("电影公社成人票【含1942民国街+南洋街】");
-        news.setPicUrl("file:///C:/Users/w6022/Pictures/Camera%20Roll/CkZeblql9vHAsylQAADSTXg_Upc427.jpg");
+        news.setPicUrl("http://localhost:8080/wechat/weixin/images/banner01.jpg");
         news.setUrl(domain+"/order");
         news.setDescription("nihaoa");
 
         News news1 = new News();
         news1.setTitle("【海南】海口电影公社通票");
-        news1.setPicUrl("file:///C:/Users/w6022/Pictures/Camera%20Roll/CkZeblql9vHAsylQAADSTXg_Upc427.jpg");
+        news1.setPicUrl("http://localhost:8080/wechat/weixin/images/banner01.jpg");
         news1.setUrl("https://weibo.com/hnagroup");
         news1.setDescription("nihaoa");
 
         News news2 = new News();
         news2.setTitle("【海南】海口电影公社通票 -限海南本地居民使用");
-        news2.setPicUrl("file:///C:/Users/w6022/Pictures/Camera%20Roll/CkZeblql9vHAsylQAADSTXg_Upc427.jpg");
+        news2.setPicUrl("http://localhost:8080/wechat/weixin/images/banner01.jpg");
         news2.setUrl("http://www.hnagroup.com/en-us/");
         news2.setDescription("nihaoa");
 
@@ -166,4 +166,5 @@ public class MessageUtil {
         return  message;
     }
 
+    //public String
 }

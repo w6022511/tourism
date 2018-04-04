@@ -3,6 +3,7 @@ package org.eking.tourism.module.user.controller;
 
 import org.eking.tourism.common.common.ErrorCode;
 import org.eking.tourism.common.common.ServiceResult;
+import org.eking.tourism.common.interceptor.DoAuth;
 import org.eking.tourism.module.user.service.UserService;
 import org.eking.tourism.repository.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
